@@ -1,6 +1,7 @@
 #ifndef PROTOTYPE_H_
 #define PROTOTYPE_H_
 #include"source\Heap.h"
+#include"source\Graph.h"
 
 //Start.cpp
 bool start(int&);
@@ -69,6 +70,22 @@ bool isPrime(int);
 
 void reverseAVLtree(Node* , int& , int& , int& );
 
+
+// Ex7
+int printwithHeight(Node*, int);
+
 // Ex9
 void AVLtoHeap(Node*, Heap&);
+
+//Ex10
+
+
+
+// Ex11
+
+int** createMatrix(int size);
+
+void freeMatrix(int**, int);
+
+void printMatrix(int**, int);
 #endif

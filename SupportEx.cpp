@@ -36,9 +36,17 @@ int getHeight(Node* root){
 	int rHeight = getHeight(root->right);
 	return 1 + (lHeight > rHeight) ? lHeight : rHeight;
 }
-
-void printwithHeight(Node* root){
-
+/*
+height == 0 return root->data
+*/
+int printwithHeight(Node* root,int height){
+	if (!root || height ==-1)
+		return 0;
+	if (height == 0)
+		return root->data;
+	int lHeight = printwithHeight(root->left, height - 1);
+	int rHeight = printwithHeight(root->right, height - 1);
+	return lHeight + rHeight;
 }
 //ex9
 void AVLtoHeap(Node*root, Heap& heap){
@@ -47,4 +55,27 @@ void AVLtoHeap(Node*root, Heap& heap){
 	heap.InsertHeap(root->data);
 	AVLtoHeap(root->left, heap);
 	AVLtoHeap(root->right, heap);
+}
+//ex11
+// create adjacent MAtrix
+int** createMatrix(int size){
+	int** adjacencyMatrix = new int*[size];
+	for (int i = 0; i < size; i++){
+		adjacencyMatrix[i] = new int[size];
+		for (int j = 0; j < size; j++)
+			adjacencyMatrix[i][j] = 0;
+	}
+	return adjacencyMatrix;
+}
+void printMatrix(int** adjMatrix, int size){
+	for (int i = 0; i < size; i++){
+		for (int j = 0; j < size; j++)
+			cout << adjMatrix[i][j] << "\t";
+		cout << endl;
+	}
+}
+void freeMatrix(int ** adjacencyMatrix,int size){
+	for (int i = 0; i < size; i++)
+		delete adjacencyMatrix[i];
+	delete adjacencyMatrix;
 }

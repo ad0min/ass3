@@ -79,7 +79,7 @@ void ex4(){
 	}
 	Heap* heap =new Heap( Heap::ArrayToHeap(arr, n));
 	heap->PrintHeapTree();
-	//  need free phead (protected)
+	//  need free head (protected)
 }
 void freeGraph(Graph*);
 void ex5(){
@@ -101,7 +101,7 @@ void ex5(){
 		delete edgeDataArr[i];
 	delete vertexDataArr;
 	delete edgeDataArr;
-	freeGraph(graph);
+	freeGraph(graph);// Wrong
 	delete graph;
 }
 void ex6(){
@@ -113,7 +113,7 @@ void ex6(){
 		edgeCount);
 	Graph* graph = new Graph();
 	for (int i = 0; i < edgeCount; i++){
-		graph->InsertEdge(edgeDataArr[i][1], edgeDataArr[i][2]);
+		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
 	}
 	graph->Print();
 	
@@ -134,25 +134,29 @@ void ex6(){
 	freeGraph(graph);
 	delete graph;
 }
-void ex7(){
+void ex7(){//done
 	int n = 0;
 	int *arr;
 	ReadArrayInput("input/E7.txt", arr, n);
 	AVLTree* tree = new AVLTree(AVLTree::ArrayToAVL(arr, n).root);
 	tree->PrintAVL();
-
-	// ??????????????????????????????
-
+	
+	for (int i = 0;; i++){
+		int sum = printwithHeight(tree->root, i);
+		if (sum == 0)
+			break;
+		cout << sum<<endl;
+	}
 	freeRoot(tree->root);
 	delete tree;
 }
-void ex8(){
+void ex8(){//done
 	int n = 0;
 	int*arr;
 	ReadArrayInput("input/E8.txt", arr, n);
 	Heap heap = Heap::ArrayToHeap(arr, n);
 	heap.PrintHeapTree();
-	int size = heap.GetSize();//size
+
 	for (int i = 0; i< n; i = 2 * i + 1){
 		int sum = 0;
 		for (int j = i; j < 2 * i + 1 && j<n; j++)
@@ -166,15 +170,78 @@ void ex8(){
 void ex9(){
 	int n = 0;
 	int *arr;
-	ReadArrayInput("input/E7.txt", arr, n);
+	ReadArrayInput("input/E9.txt", arr, n);
 	AVLTree tree = AVLTree::ArrayToAVL(arr, n).root;
 	tree.PrintAVL();
 	Heap heap = Heap();
 	AVLtoHeap(tree.root, heap);
+	cout << " AVL to Heap :" << endl;
 	heap.PrintHeapTree();
 	freeRoot(tree.root);
 	// free heap
 }
-void ex10(){
 
+//void HeaptoGraph(Heap heap, Graph* graph, int i=0);
+//ex10
+void HeaptoGrap(Heap heap, Graph* graph, int i=0){
+	if (i * 2 + 1 > heap.GetSize())
+		return;
+	graph->InsertEdge(heap[i], heap[i * 2 + 1]);
+	graph->InsertEdge(heap[i * 2 + 1], heap[i]);
+	if (i * 2 + 2 > heap.GetSize())
+		return;
+	graph->InsertEdge(heap[i], heap[i * 2 + 2]);
+	graph->InsertEdge(heap[i * 2 + 2], heap[i]);
+	HeaptoGrap(heap, graph, ++i);
+}
+void ex10(){
+	int n = 0;
+	int*arr;
+	ReadArrayInput("input/E10.txt", arr, n);
+	Heap heap = Heap::ArrayToHeap(arr, n);
+	heap.PrintHeapTree();
+	Graph* graph = new Graph();
+	HeaptoGrap(heap, graph);
+	cout << endl;
+	graph->Print();
+	// free graph
+	//free heap
+}
+void ex11(){
+	int *vertexDataArr;
+	int vertexCount;
+	int **edgeDataArr;
+	int edgeCount;
+	ReadArrayInputOfGraph("input/E11.txt", vertexDataArr, vertexCount, edgeDataArr,
+		edgeCount);
+	Graph* graph = new Graph();
+	for (int i = 0; i < edgeCount; i++){
+		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
+	}
+	graph->Print();
+	int size = graph->size + 1;
+	int **adjMatrix = createMatrix(size);
+
+	Vertex* vtemp = graph->gHead;
+	for (int i = 1; i < size; i++){
+		adjMatrix[i][0] = vtemp->data;
+		adjMatrix[0][i] = vtemp->data;
+		vtemp = vtemp->nextVertex;
+	}
+	vtemp = graph->gHead;
+	for (int i = 1; i < size; i++){
+		Edge* etemp = vtemp->firstEdge;
+		while (etemp){
+			for (int j = 1; j < size; j++){
+				if (adjMatrix[0][j] == etemp->destination->data)
+					adjMatrix[i][j] = 1;
+			}
+			etemp = etemp->nextEdge;
+		}
+		vtemp = vtemp->nextVertex; 
+	}
+	printMatrix(adjMatrix, size);
+
+	freeMatrix(adjMatrix, size);
+	//free graph
 }
