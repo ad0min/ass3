@@ -79,3 +79,4 @@ void freeMatrix(int ** adjacencyMatrix,int size){
 		delete adjacencyMatrix[i];
 	delete adjacencyMatrix;
 }
+// Ex12

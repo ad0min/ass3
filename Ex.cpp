@@ -245,3 +245,66 @@ void ex11(){
 	freeMatrix(adjMatrix, size);
 	//free graph
 }
+//void AVLtreetoMatrix(Node*, int**&,int matrix=1);
+int AVLtreetoMatrix(Node* root, int**& adjMatrix, int mark = 1){
+	if (!root)
+		return mark;
+	if (mark == 1){
+		adjMatrix[0][1] = root->data;
+		adjMatrix[1][0] = root->data;
+	}
+	int i;//find position of root
+	for (i = 1; i <= mark; i++){
+		if (adjMatrix[0][i] == root->data)
+			break;
+	}
+	if (root->left){
+		adjMatrix[0][++mark] = root->left->data;
+		adjMatrix[mark][0] = root->left->data;
+		adjMatrix[i][mark] = 1;
+	}
+	if (root->right){
+		adjMatrix[0][++mark] = root->right->data;
+		adjMatrix[mark][0] = root->right->data;
+		adjMatrix[i][mark] = 1;
+	}
+	mark =AVLtreetoMatrix(root->left, adjMatrix, mark);
+	mark =AVLtreetoMatrix(root->right, adjMatrix, mark);
+	return mark;
+}
+void ex12(){
+	int n = 0;
+	int *arr;
+	ReadArrayInput("input/E12.txt", arr, n);
+	AVLTree tree = AVLTree::ArrayToAVL(arr, n).root;
+	tree.PrintAVL();
+	int** adjMatrix = createMatrix(n+1);
+	AVLtreetoMatrix(tree.root, adjMatrix);
+	printMatrix(adjMatrix, n + 1);
+	freeMatrix(adjMatrix,n+1);
+	freeRoot(tree.root);
+}
+void ex13(){
+	int n = 0;
+	int*arr;
+	ReadArrayInput("input/E10.txt", arr, n);
+	Heap heap = Heap::ArrayToHeap(arr, n);
+	heap.PrintHeapTree();
+	int size = n + 1;
+	int** adjMatrix = createMatrix(size);
+	for (int i = 1; i < size; i++){
+		adjMatrix[0][i] = heap[i-1];
+		adjMatrix[i][0] = heap[i-1];
+	}
+	for (int i = 1; i <= (size-1) / 2; i++){
+		adjMatrix[i][2 * i ] = 1;
+		adjMatrix[2 * i ][i] = 1;
+		if (i * 2 + 1 <= n){
+			adjMatrix[i][2 * i + 1] = 1;
+			adjMatrix[2 * i + 1][i] = 1;
+		}
+	}
+	printMatrix(adjMatrix, size);
+	freeMatrix(adjMatrix,size);
+	//free Heap
+}
