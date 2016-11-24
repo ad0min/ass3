@@ -220,7 +220,7 @@ void ex11(){
 	}
 	graph->Print();
 	int size = graph->size + 1;
-	int **adjMatrix = createMatrix(size);
+	int ** adjMatrix = createMatrix(size);
 
 	Vertex* vtemp = graph->gHead;
 	for (int i = 1; i < size; i++){
@@ -287,7 +287,7 @@ void ex12(){
 void ex13(){
 	int n = 0;
 	int*arr;
-	ReadArrayInput("input/E10.txt", arr, n);
+	ReadArrayInput("input/E13.txt", arr, n);
 	Heap heap = Heap::ArrayToHeap(arr, n);
 	heap.PrintHeapTree();
 	int size = n + 1;
@@ -307,4 +307,87 @@ void ex13(){
 	printMatrix(adjMatrix, size);
 	freeMatrix(adjMatrix,size);
 	//free Heap
+}
+//void ex14(){
+//	int *vertexDataArr;
+//	int vertexCount;
+//	int **edgeDataArr;
+//	int edgeCount;
+//	ReadArrayInputOfGraph("input/E11.txt", vertexDataArr, vertexCount, edgeDataArr,
+//		edgeCount);
+//	Graph* graph = new Graph();
+//	for (int i = 0; i < edgeCount; i++){
+//		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
+//	}
+//	graph->Print();
+//	Vertex* vtemp = graph->gHead;
+//	while (vtemp){
+//
+//	}
+//}
+void ex15(){
+	int n = 0;
+	int ** adjMatrix;
+	ReadAdjacencyMat("input/E15.txt", adjMatrix, n);
+	printMatrix(adjMatrix, n);
+	Graph* graph = new Graph();
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++){
+			if (adjMatrix[i][j] == 1)
+				graph->InsertEdge(i+1, j+1);
+		}
+	graph->Print();
+	freeMatrix(adjMatrix, n);
+	//free graph
+}
+void ex16(){
+	int *vertexDataArr;
+	int vertexCount;
+	int **edgeDataArr;
+	int edgeCount;
+	ReadArrayInputOfGraph("input/E16.txt", vertexDataArr, vertexCount, edgeDataArr,
+		edgeCount);
+	Graph* graph = new Graph();
+	for (int i = 0; i < edgeCount; i++){
+		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
+	}
+	graph->Print();
+	int size = graph->size + 1;
+	int ** adjMatrix = createMatrix(size);
+
+	Vertex* vtemp = graph->gHead;
+	for (int i = 1; i < size; i++){
+		adjMatrix[i][0] = vtemp->data;
+		adjMatrix[0][i] = vtemp->data;
+		vtemp = vtemp->nextVertex;
+	}
+	vtemp = graph->gHead;
+	for (int i = 1; i < size; i++){
+		Edge* etemp = vtemp->firstEdge;
+		while (etemp){
+			for (int j = 1; j < size; j++){
+				if (adjMatrix[0][j] == etemp->destination->data)
+					adjMatrix[i][j] = 1;
+			}
+			etemp = etemp->nextEdge;
+		}
+		vtemp = vtemp->nextVertex;
+	}
+	printMatrix(adjMatrix, size);
+	// check strong connected
+	bool check = true;
+	for (int i = 1; i < size; i++)
+		for (int j = 1; j < size && j!=i;j++)
+			if (adjMatrix[i][j]!=1)
+			{
+				check = false;
+				break;
+			}
+	if (check == false)
+		cout << endl << "This graph isn't strong connected\n";
+	else
+		cout << endl << "This graph is strong connected\n";
+	freeMatrix(adjMatrix, size);
+	//free Graph
+	// free
 }
