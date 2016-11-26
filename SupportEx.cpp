@@ -80,3 +80,11 @@ void freeMatrix(int ** adjacencyMatrix,int size){
 	delete adjacencyMatrix;
 }
 // Ex12
+
+
+// ex14
+int getCycle(Vertex* vertex, int i = 0){
+	while (vertex){
+		
+	}
+}
