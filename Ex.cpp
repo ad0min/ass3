@@ -5,6 +5,7 @@
 #include"source\Heap.h"
 #include"source\Graph.h"
 #include"Prototype.h"
+#include"GraphW.h"
 using namespace std;
 #include <iostream>
 #include <vector>
@@ -140,11 +141,9 @@ void ex7(){//done
 	ReadArrayInput("input/E7.txt", arr, n);
 	AVLTree* tree = new AVLTree(AVLTree::ArrayToAVL(arr, n).root);
 	tree->PrintAVL();
-	
-	for (int i = 0;; i++){
+	int height = heightTree(tree->root);
+	for (int i = 0;i< height; i++){
 		int sum = printwithHeight(tree->root, i);
-		if (sum == 0)
-			break;
 		cout << sum<<endl;
 	}
 	freeRoot(tree->root);
@@ -308,23 +307,48 @@ void ex13(){
 	freeMatrix(adjMatrix,size);
 	//free Heap
 }
-//void ex14(){
-//	int *vertexDataArr;
-//	int vertexCount;
-//	int **edgeDataArr;
-//	int edgeCount;
-//	ReadArrayInputOfGraph("input/E11.txt", vertexDataArr, vertexCount, edgeDataArr,
-//		edgeCount);
-//	Graph* graph = new Graph();
-//	for (int i = 0; i < edgeCount; i++){
-//		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
-//	}
-//	graph->Print();
-//	Vertex* vtemp = graph->gHead;
-//	while (vtemp){
-//
-//	}
-//}
+int getCycle(Vertex* vertex, const int data, int i = 0){
+	Edge* etemp = vertex->firstEdge;
+	if (vertex->processed == false)
+		vertex->processed = true;
+	while (etemp){
+		if (etemp->destination->processed == false){
+			etemp->destination->processed == true;
+			i = getCycle(etemp->destination, data, i);
+		}
+		else{
+			if (etemp->destination->data == data)
+				i++;
+		}
+		etemp = etemp->nextEdge;
+	}
+	return i;
+}
+void ex14(){
+	int *vertexDataArr;
+	int vertexCount;
+	int **edgeDataArr;
+	int edgeCount;
+	ReadArrayInputOfGraph("input/E14.txt", vertexDataArr, vertexCount, edgeDataArr,
+		edgeCount);
+	Graph* graph = new Graph();
+	for (int i = 0; i < edgeCount; i++){
+		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
+	}
+	graph->Print();
+	Vertex* vtemp = graph->gHead;
+	int circuit = 0;
+	while (vtemp){
+		Vertex* vvtemp = graph->gHead;
+		while (vvtemp){
+			vvtemp->processed = false;
+			vvtemp = vvtemp->nextVertex;
+		}
+		circuit += getCycle(vtemp, vtemp->data);
+		vtemp = vtemp->nextVertex;
+	}
+	cout <<"\nAll of circuit in graph is: "<< circuit;
+}
 void ex15(){
 	int n = 0;
 	int ** adjMatrix;
@@ -390,4 +414,41 @@ void ex16(){
 	freeMatrix(adjMatrix, size);
 	//free Graph
 	// free
+}
+//void ex17(){
+//	int n = 0;
+//	int ** adjMatrix;
+//	ReadAdjacencyMat("input/E17.txt", adjMatrix, n);
+//	printMatrix(adjMatrix, n);
+//	//check matrix is tree avl
+//	int iroot = findRootMatrix(adjMatrix, n);
+//	bool checkMatrix = checkMatrixisTree(adjMatrix, n);
+//	if (iroot == 0|| checkMatrix==false){
+//		cout << "Can't covert this matrix to AVL tree\n";
+//		return;
+//	}
+//	AVLTree* tree = new AVLTree();
+//	matrixtoAVL(adjMatrix, n, iroot, tree->root);
+//	freeMatrix(adjMatrix, n);
+//}
+void ex18(){
+	int n = 0;
+	int ** adjMatrix;
+	ReadAdjacencyMat("input/E18.txt", adjMatrix, n);
+	printMatrix(adjMatrix, n);
+	GraphW* graph = new GraphW();
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (adjMatrix[i][j] != 0)
+				graph->InsertEdge(i + 1, j + 1, adjMatrix[i][j]);
+	graph->Print();
+	// input two vertex
+	int from, to;
+	cout << "Input first Vertex: ";
+	cin >> from;
+	cout << "Input second Vertex: ";
+	cin >> to;
+	//check
+	findPath(from, to, graph);
+	// more check 
 }

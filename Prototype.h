@@ -2,6 +2,7 @@
 #define PROTOTYPE_H_
 #include"source\Heap.h"
 #include"source\Graph.h"
+#include"GraphW.h"
 
 //Start.cpp
 bool start(int&);
@@ -74,6 +75,8 @@ void reverseAVLtree(Node* , int& , int& , int& );
 // Ex7
 int printwithHeight(Node*, int);
 
+int heightTree(Node*);
+
 // Ex9
 void AVLtoHeap(Node*, Heap&);
 
@@ -88,4 +91,22 @@ int** createMatrix(int size);
 void freeMatrix(int**, int);
 
 void printMatrix(int**, int);
+
+// ex14
+
+//int getCycle(Vertex*, const int, int i=0);
+
+
+
+// ex17
+int findRootMatrix(int **adjMatrix, int n);
+
+
+
+// Vertex* root to point a element of graph; if wrong => fail
+
+
+// ex18
+bool findPath(int, int, GraphW*);
+
 #endif

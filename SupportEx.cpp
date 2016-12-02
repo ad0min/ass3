@@ -4,6 +4,8 @@
 #include"source\Heap.h"
 #include"source\Graph.h"
 #include"Prototype.h"
+#include"Stack.h"
+#include"GraphW.h"
 using namespace std;
 //
 
@@ -39,6 +41,16 @@ int getHeight(Node* root){
 /*
 height == 0 return root->data
 */
+
+//ex7
+// root =1;
+int heightTree(Node* root){
+	if (!root)
+		return 0;
+	int lheight = heightTree(root->left) + 1;
+	int rheight = heightTree(root->right) + 1;
+	return (lheight > rheight) ? lheight : rheight;
+}
 int printwithHeight(Node* root,int height){
 	if (!root || height ==-1)
 		return 0;
@@ -83,8 +95,105 @@ void freeMatrix(int ** adjacencyMatrix,int size){
 
 
 // ex14
-int getCycle(Vertex* vertex, int i = 0){
-	while (vertex){
-		
+
+//ex17
+bool checkRootinMatrix(int **adjMatrix,int n, int i){
+	for (int j = 0; j < n; j++){
+		if (adjMatrix[i][j] == 1)
+			return false;
 	}
+	return true;
+}
+// check Matrix cant to change a tree
+bool checkMatrixisTree(int **adjMatrix, int n){
+	bool check = true;
+	int sumEdge = 0;
+	for (int i = 0; i < n; i++){
+		int count = 0;/*
+		int arr[2] = { 0, 0 };*/
+		for (int j = 0; j < n; j++)
+			if (adjMatrix[i][j] == 1){
+				count ++;/*
+				int temp = (arr[0] == arr[1]) ? 0 : 1;
+				if (arr[1] == 0)
+					arr[temp] = j;*/
+			}
+		if (count > 2)
+			check = false;
+		sumEdge += count;
+	}
+	if (sumEdge != n - 1)
+		check = false;
+	return check;
+}
+int findRootMatrix(int **adjMatrix, int n){
+	for (int i = 0; i < n; i++){
+		if (checkRootinMatrix(adjMatrix, n, i) == true)
+			return i + 1;
+	}
+	return 0;
+}
+//bool inserttoAVL(int **adjMatrix, int n, int root, AVLTree* tree){
+//	bool* val = new bool[n];
+//	for (int i = 0; i < n; i++)
+//		val[i] = false;
+//	stack* s = new stack();
+//	node* temp;
+//	if (val[root] == false){
+//		s->push(root);
+//		val[root] = true;
+//		while (s->size != 0){
+//			temp = s->pop();
+//			tree->AVLInsert(temp->data);
+//			for (int j = 0; j < n; j++){
+//				if (adjMatrix[temp->data][j] == 1 && val[j] == false){
+//					s->push(j);
+//					
+//					val[j] = true;
+//				}
+//			}
+//		}
+//	}
+//}
+//bool inserttoAVL(int **adjMatrix, int n, int i, AVLTree* tree){
+//
+//	if (!tree->root)
+//		tree->AVLInsert(i);
+//	int arr[] = { 0, 0 };
+//	for (int j = 0; j < n; j++){
+//		if (adjMatrix[i][j] == 1){
+//			int temp = (arr[0] == 0) ? 0 : 1;
+//			arr[temp] = j;
+//		}
+//		if (arr[0] != 0){
+//			if (arr[1] != 0)
+//				if (arr[0]<i&&arr[1]>i){
+//					tree->AVLInsert(arr[0]);
+//					tree->AVLInsert(arr[1]);
+//
+//				}
+//				else
+//					return false;
+//			else
+//				tree->AVLInsert(arr[0]);
+//		}
+//
+//	}
+//}
+
+// ex18
+bool findPath(int _from, int _to, GraphW * graph){
+	VertexW* from = graph->GetVertex(_from);
+	VertexW* to = graph->GetVertex(_to);
+	if (!from || !to)
+		return false;
+	graph->resetVertex();
+	int minPath = graph->Dijktra(from, to);
+	if (minPath == MAX_INT)
+	{
+		cout << "\nDon't have path connect from " << _from << " to " << _to << endl;
+		return false;
+	}
+	cout << "\nMin path is : " << minPath << endl;
+	return true;
 }
