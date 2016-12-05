@@ -6,6 +6,7 @@
 #include"Prototype.h"
 #include"Stack.h"
 #include"GraphW.h"
+#include<list>
 using namespace std;
 //
 
@@ -95,6 +96,68 @@ void freeMatrix(int ** adjacencyMatrix,int size){
 
 
 // ex14
+
+
+// ex16
+int getIndex(list<int>* stack, int data){
+	list<int>::iterator it = stack->begin();
+	for (int i = 0; it!=stack->end(); i++, it++){
+		if (*it == data)
+			return i;
+	}
+	return -1;
+}
+
+
+void Tarjan_variant(Vertex *vertex, int *low, int *num, list<int>* stack, int& count){
+	if (vertex->processed == true)
+		return;
+	int vertexIndex= count;
+	low[vertexIndex] = num[vertexIndex] = count;
+	count++;        
+	vertex->processed = true;
+	stack->push_back(vertex->data);
+	Edge* etemp = vertex->firstEdge;
+	while (etemp){
+		Vertex* vtemp = etemp->destination;
+		if (vtemp->processed == false)
+			Tarjan_variant(vtemp, low, num, stack, count);
+		int vtempIndex = getIndex(stack, vtemp->data);
+		vtempIndex = vtempIndex < low[vtempIndex] ? vtempIndex : low[vtempIndex];
+		low[vertexIndex] = vtempIndex < low[vertexIndex] ? vtempIndex : low[vertexIndex];
+		etemp = etemp->nextEdge;
+	}
+	if (low[vertexIndex] == num[vertexIndex])
+		return ;
+}
+
+void print(int * arr, int n){
+	for (int i = 0; i < n; i++)
+		cout << arr[i] << "\t";
+}
+bool checkSConnected(Graph *graph){
+	Vertex *vtemp = graph->gHead;
+	int size = graph->size;
+	int *low = new int[size];
+	int *num = new int[size];
+	list<int> stack;
+	for (int i = 0; i < size; i++){
+		low[i] = 0;
+		num[i] = 0;
+	}
+	int count = 0;
+	Tarjan_variant(vtemp, low, num, &stack,count);
+	for (int i = 1; i < size; i++){
+		if (low[i] >= num[i]){
+			delete[]low;
+			delete []num;
+			return false;
+		}
+	}
+	delete[]low;
+	delete[]num;
+	return true;
+}
 
 //ex17
 bool checkRootinMatrix(int **adjMatrix,int n, int i){
