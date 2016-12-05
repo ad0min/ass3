@@ -48,44 +48,6 @@ void Graph::Print(){
 
 // Implement function RemoveVertex(Vertex*)
 // code again !
-bool Graph::RemoveVertex(Vertex* vertex){// return false or true need be considered
-	if (!vertex)
-		return false;
-	Vertex* temp = gHead;
-	if (temp == vertex)// case first 
-		gHead = gHead->nextVertex;
-	else{
-		// delete edge link to vertex
-		while (temp->nextVertex){
-			if (temp->nextVertex == vertex)
-				temp->nextVertex = vertex->nextVertex;// connect linked list
-			Edge* etemp = temp->firstEdge;
-			if (etemp->destination == vertex){
-				temp->firstEdge = etemp->nextEdge;
-				delete etemp->destination;
-				delete etemp;
-			}
-			else
-				while (etemp){
-					if (etemp->destination == vertex){
-						Edge* eetemp = etemp;
-						etemp = etemp->nextEdge;
-						delete eetemp->destination;
-						delete eetemp;
-					}
-				}
-		}
-	}
-	// under is code to delete Edge in middle of linked list gHead 
-	Edge* edge = vertex->firstEdge;
-	while (edge){
-		delete edge->destination;
-		Edge* etemp = edge->nextEdge;
-		delete edge;
-		edge = etemp;
-	}
-	return true;
-}
 bool Graph::RemoveVertex(int data){
 	Vertex* vertex = this->GetVertex(data);
 	return RemoveVertex(vertex);
@@ -101,7 +63,6 @@ bool Graph::RemoveEdge(Vertex* from, Vertex* to){
 			{
 				Edge* eetemp = etemp;
 				vtemp->firstEdge = etemp->nextEdge;
-				delete eetemp->destination;
 				delete eetemp;
 				return true;
 			}
@@ -111,8 +72,8 @@ bool Graph::RemoveEdge(Vertex* from, Vertex* to){
 					if (eetemp->destination == to)
 					{
 						etemp->nextEdge = eetemp->nextEdge;
-						delete eetemp->destination;
 						delete eetemp;
+						return true;
 					}
 					etemp = eetemp;
 					eetemp = eetemp->nextEdge;
@@ -122,4 +83,9 @@ bool Graph::RemoveEdge(Vertex* from, Vertex* to){
 		vtemp = vtemp->nextVertex;
 	}
 	return false;
+}
+bool Graph::RemoveEdge(int from, int to){
+	Vertex *_from = GetVertex(from);
+	Vertex *_to = GetVertex(to);
+	return RemoveEdge(_from, _to);
 }
