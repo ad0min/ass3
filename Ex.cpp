@@ -117,23 +117,29 @@ void ex6(){
 		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
 	}
 	graph->Print();
-	
-	int input = 0;
-	while (1){
-		cout << "Input number of node needed to remove: ";
-		cin >> input;
-		//more function to check input to valid 
-		if (input == -1)
-			break;
-		graph->RemoveVertex(input);
-		graph->Print();
-	}
-	for (int i = 0; i < edgeCount; i++)
-		delete edgeDataArr[i];
-	delete vertexDataArr;
-	delete edgeDataArr;
-	freeGraph(graph);
-	delete graph;
+	Vertex * from = graph->GetVertex(131);
+	Vertex *to = graph->GetVertex(648);
+	graph->RemoveEdge(from, to);
+	graph->Print();
+
+
+	//
+	//int input = 0;
+	//while (1){
+	//	cout << "Input number of node needed to remove: ";
+	//	cin >> input;
+	//	//more function to check input to valid 
+	//	if (input == -1)
+	//		break;
+	//	graph->RemoveVertex(input);
+	//	graph->Print();
+	//}
+	//for (int i = 0; i < edgeCount; i++)
+	//	delete edgeDataArr[i];
+	//delete vertexDataArr;
+	//delete edgeDataArr;
+	//freeGraph(graph);
+	//delete graph;
 }
 void ex7(){//done
 	int n = 0;
@@ -376,42 +382,11 @@ void ex16(){
 		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
 	}
 	graph->Print();
-	int size = graph->size + 1;
-	int ** adjMatrix = createMatrix(size);
-
-	Vertex* vtemp = graph->gHead;
-	for (int i = 1; i < size; i++){
-		adjMatrix[i][0] = vtemp->data;
-		adjMatrix[0][i] = vtemp->data;
-		vtemp = vtemp->nextVertex;
-	}
-	vtemp = graph->gHead;
-	for (int i = 1; i < size; i++){
-		Edge* etemp = vtemp->firstEdge;
-		while (etemp){
-			for (int j = 1; j < size; j++){
-				if (adjMatrix[0][j] == etemp->destination->data)
-					adjMatrix[i][j] = 1;
-			}
-			etemp = etemp->nextEdge;
-		}
-		vtemp = vtemp->nextVertex;
-	}
-	printMatrix(adjMatrix, size);
-	// check strong connected
-	bool check = true;
-	for (int i = 1; i < size; i++)
-		for (int j = 1; j < size && j!=i;j++)
-			if (adjMatrix[i][j]!=1)
-			{
-				check = false;
-				break;
-			}
+	bool check = checkSConnected(graph);
 	if (check == false)
 		cout << endl << "This graph isn't strong connected\n";
 	else
 		cout << endl << "This graph is strong connected\n";
-	freeMatrix(adjMatrix, size);
 	//free Graph
 	// free
 }
