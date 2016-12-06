@@ -333,3 +333,53 @@ int GraphW::Dijktra(VertexW* from, VertexW* to){
 	DijktraUtil(from, to, weight, S);
 	return weight[to->data-1];
 }
+
+/*
+Dijktra_ variant use for ex19 
+*/
+bool checkList(list<int>*arr, int data){
+	for (list<int>::iterator it = arr->begin(); it != arr->end(); it++){
+		if (*it == data)
+			return false;
+	}
+	return true;
+}
+
+void GraphW::Dijktra_variantUtil(VertexW *from, VertexW *to, int weight[], int S[], list<int>*arr){
+	if (from == to)
+		return;
+
+	EdgeW* etemp = from->firstEdge;
+	S[from->data - 1] = 1;
+	VertexW *destinationV;
+	while (etemp){
+		destinationV = etemp->destination;
+		if (weight[destinationV->data - 1] > weight[from->data - 1] + etemp->weight)
+			weight[destinationV->data - 1] = weight[from->data - 1] + etemp->weight;
+		etemp = etemp->nextEdge;
+	}
+	int j = 0;
+	for (; j < size; j++)
+		if (!S[j] && weight[j] != MAX_INT && weight[j] != 0&& checkList(arr,j+1))
+			break;
+
+
+	if (j == size)
+		return;
+	for (int i = 0; i < size; i++)
+		if (!S[i] && weight[i]<weight[j] && weight[i] != 0 && checkList(arr, i+1))
+			j = i;
+	VertexW *_from = GetVertex(j + 1);
+	Dijktra_variantUtil(_from, to, weight, S,arr);
+}
+int GraphW::Dijktra_variant(VertexW* from, VertexW* to,list<int>*arr){
+	int* weight = new int[size];
+	int* S = new int[size];
+	for (int i = 0; i < size; i++){
+		weight[i] = MAX_INT;
+		S[i] = 0;
+	}
+	weight[from->data - 1] = 0;
+	Dijktra_variantUtil(from, to, weight, S,arr);
+	return weight[to->data - 1];
+}

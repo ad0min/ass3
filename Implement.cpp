@@ -17,14 +17,14 @@ void freeRoot(Node* root){
 	freeRoot(temp2);
 }
 // free memory Graph
-void freeGraph(Graph* graph){
-	Vertex* vertex = graph->gHead;
-	while (vertex){
-		Vertex* temp = vertex->nextVertex;
-		graph->RemoveVertex(vertex);
-		vertex = temp;
-	}
-}
+//void freeGraph(Graph* graph){
+//	Vertex* vertex = graph->gHead;
+//	while (vertex){
+//		Vertex* temp = vertex->nextVertex;
+//		graph->RemoveVertex(vertex);
+//		vertex = temp;
+//	}
+//}
 
 
 // implement function Print() in Class Graph
@@ -48,10 +48,10 @@ void Graph::Print(){
 
 // Implement function RemoveVertex(Vertex*)
 // code again !
-bool Graph::RemoveVertex(int data){
-	Vertex* vertex = this->GetVertex(data);
-	return RemoveVertex(vertex);
-}
+//bool Graph::RemoveVertex(int data){
+//	Vertex* vertex = this->GetVertex(data);
+//	return RemoveVertex(vertex);
+//}
 bool Graph::RemoveEdge(Vertex* from, Vertex* to){
 	if (!from || !to)
 		return false;
@@ -88,4 +88,64 @@ bool Graph::RemoveEdge(int from, int to){
 	Vertex *_from = GetVertex(from);
 	Vertex *_to = GetVertex(to);
 	return RemoveEdge(_from, _to);
+}
+
+
+// ex17 use for insert search NOde tree
+
+Node* search(Node* root, int data){
+	if (!root)
+		return NULL;
+	if (root->data == data)
+		return root;
+	if (root->data > data)
+		return search(root->left, data);
+	else
+		return search(root->right, data);
+}
+bool insert(Node*& root, int from, int to){//fail
+	if (!root)
+		return false;
+	Node *temp = search(root, from);
+	if (!temp){
+		if (to == root->data){
+			temp = new Node(from);
+			if (temp->data > to)
+				temp->left = root;
+			if (temp->data < to)
+				temp->right = root;
+			root = temp;
+			return true;
+		}
+		return false;
+	}
+	else{
+		if (temp->data > to)
+			temp->left = new Node(to);
+		if (temp->data < to)
+			temp->right = new Node(to);
+		return true;
+	}
+}
+bool checkAVl(Node* root){
+	if (!root)
+		return true;
+	int left = heightTree(root->left);
+	int right = heightTree(root->right);
+	int sub = (int)abs(left - right);
+	if (sub <= 1){
+		bool l = checkAVl(root->left);
+		bool r = checkAVl(root->right);
+		return (l || r);
+	}
+	else
+		return false;
+}
+
+void resetVertex(Graph* graph){
+	Vertex* vtemp = graph->gHead;
+	while (vtemp){
+		vtemp->processed = true;
+		vtemp = vtemp->nextVertex;
+	}
 }

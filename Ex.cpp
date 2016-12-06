@@ -11,6 +11,7 @@ using namespace std;
 #include <vector>
 #include <functional>
 #include <algorithm>
+#include <list>
 
 void ex1(){
 	int n = 0;
@@ -102,7 +103,7 @@ void ex5(){
 		delete edgeDataArr[i];
 	delete vertexDataArr;
 	delete edgeDataArr;
-	freeGraph(graph);// Wrong
+	//freeGraph(graph);// Wrong
 	delete graph;
 }
 void ex6(){
@@ -390,22 +391,22 @@ void ex16(){
 	//free Graph
 	// free
 }
-//void ex17(){
-//	int n = 0;
-//	int ** adjMatrix;
-//	ReadAdjacencyMat("input/E17.txt", adjMatrix, n);
-//	printMatrix(adjMatrix, n);
-//	//check matrix is tree avl
-//	int iroot = findRootMatrix(adjMatrix, n);
-//	bool checkMatrix = checkMatrixisTree(adjMatrix, n);
-//	if (iroot == 0|| checkMatrix==false){
-//		cout << "Can't covert this matrix to AVL tree\n";
-//		return;
-//	}
-//	AVLTree* tree = new AVLTree();
-//	matrixtoAVL(adjMatrix, n, iroot, tree->root);
-//	freeMatrix(adjMatrix, n);
-//}
+void ex17(){
+	int n = 0;
+	int ** adjMatrix;
+	ReadAdjacencyMat("input/E17.txt", adjMatrix, n);
+	printMatrix(adjMatrix, n);
+	//check matrix is tree avl
+	Graph* graph = new Graph();
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (adjMatrix[i][j] == 1)
+				graph->InsertEdge(i + 1, j + 1);
+	
+	graph->Print();
+	GraphtoAVL(graph);
+	freeMatrix(adjMatrix, n);
+}
 void ex18(){
 	int n = 0;
 	int ** adjMatrix;
@@ -426,4 +427,39 @@ void ex18(){
 	//check
 	findPath(from, to, graph);
 	// more check 
+}
+void ex19(){
+	int n = 0;
+	int ** adjMatrix;
+	ReadAdjacencyMat("input/E18.txt", adjMatrix, n);
+	printMatrix(adjMatrix, n);
+	GraphW* graph = new GraphW();
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (adjMatrix[i][j] != 0)
+				graph->InsertEdge(i + 1, j + 1, adjMatrix[i][j]);
+	graph->Print();
+	// input two vertex
+	int from, to, k;
+	list<int> arr;
+	cout << "\nInput first Vertex: ";
+	cin >> from;
+	cout << "\nInput second Vertex: ";
+	cin >> to;
+	findPath(from, to, graph);
+	cout << "\nInput -1 to exit\n";
+	while (1){
+		while (1){
+			cout << "\nInput k Vertex: ";
+			cin >> k;
+			if (k == -1)
+				break;
+			arr.push_back(k);
+		}
+		findPath_variant(from, to, graph,&arr);
+		cout << "\nDo you want to continue? 0= true, -1=false: ";
+		cin >> k;
+		if (k == -1)
+			break;
+	}
 }

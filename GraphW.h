@@ -26,6 +26,7 @@ Purpose: Header file for the Graph class
 #define GRAPHW_H
 #include <cassert>
 #include <iostream>
+#include<list>
 
 #define MAX_INT 32767
 
@@ -255,6 +256,12 @@ public:
 	void DijktraUtil(VertexW *from, VertexW *to, int weight[], int B[]);
 
 	int Dijktra(VertexW* from, VertexW* to);
+	/*
+	algothims hallowed djiktra variant use for ex19
+	*/
+	void Dijktra_variantUtil(VertexW*from, VertexW *to, int weight[], int B[], std::list<int>* arr);
+
+	int Dijktra_variant(VertexW*from, VertexW* to, list<int>* arr);
 };
 
 #endif
