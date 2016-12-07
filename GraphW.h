@@ -3,7 +3,6 @@ DO NOT MODIFY THIS FILE
 Data Structure & Algorithm Assignment 3
 Graph.h
 Purpose: Header file for the Graph class
-
 @author Kien Huynh
 @version 1.1 05-10-2016
 ***************************************************/
@@ -247,7 +246,7 @@ public:
 	void Print();
 
 	/*
-	algothims hallowed djiktra 
+	algothims hallowed djiktra
 	*/
 	void resetVertex();
 

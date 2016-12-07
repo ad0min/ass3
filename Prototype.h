@@ -5,7 +5,7 @@
 #include"GraphW.h"
 
 //Start.cpp
-bool start(int&);
+
 
 //Exercise prototype
 
@@ -18,7 +18,7 @@ void ex3();
 void ex4();
 
 void ex5();
- 
+
 void ex6();
 
 void ex7();
@@ -49,29 +49,11 @@ void ex19();
 
 void ex20();
 
-
-int sumCycle(Vertex*);
-
 // Implement.cpp
 
 void freeRoot(Node*);
 
-Node* search(Node *, int);
-
-
-bool insert(Node*&, int, int);
-
-bool checkAVl(Node* root);
-
-void resetVertex(Graph*);
-
 //void freeGraph(Graph*);
-
-
-
-
-
-
 
 
 
@@ -81,7 +63,7 @@ void resetVertex(Graph*);
 
 bool isPrime(int);
 
-void reverseAVLtree(Node* , int& , int& , int& );
+void reverseAVLtree(Node*, int&, int&, int&);
 
 
 // Ex7
@@ -90,11 +72,11 @@ int printwithHeight(Node*, int);
 int heightTree(Node*);
 
 // Ex9
-void AVLtoHeap(Node*, Heap&);
+void AVLtoGrap(Node*, Graph*);
 
 //Ex10
 
-
+void HeaptoGrap(Heap, Graph*, int);
 
 // Ex11
 
@@ -104,21 +86,30 @@ void freeMatrix(int**, int);
 
 void printMatrix(int**, int);
 
+// ex12
+
+int AVLtreetoMatrix(Node*, int**&, int);
+
 // ex14
 
-//int getCycle(Vertex*, const int, int i=0);
+int getCycle(Vertex* vertex, const int data, int i);
 
-
-// ex16
-bool checkSConnected(Graph*);
+int sumCycle(Vertex* ghead);
 
 // ex17
-//int findRootMatrix(int **adjMatrix, int n);
 
+bool GraphtoTree(Vertex *vertex, Node *&root);
+
+bool insert(Node*& root, int from, int to);
+
+bool checkAVl(Node* root);
 
 bool checkGraphDFS(Vertex *vertex, Node *root);
 
-bool GraphtoAVL(Graph*);
+void resetVertex(Graph* graph);
+
+bool GraphtoAVL(Graph *graph);
+
 
 // Vertex* root to point a element of graph; if wrong => fail
 
@@ -126,7 +117,15 @@ bool GraphtoAVL(Graph*);
 // ex18
 bool findPath(int, int, GraphW*);
 
-//ex 19
-bool findPath_variant(int, int, GraphW*, list<int>*);
+// ex19
+bool findPath_variant(int _from, int _to, GraphW *graph, list<int>*arr);
 
-#endif
+//ex20
+
+void GraphtoMatrix(Graph* graph, string input, int **&matrix, int &vertex_count, int &edge_count);
+
+bool Isomorphic(int **matrixa, int **matrixb, int *x, int n);
+
+void Permutation_check(int **matrixa, int **matrixb, int dieukien[100], int *x, int n, int i, bool &result);
+
+#endif#pragma once

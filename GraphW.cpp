@@ -3,7 +3,6 @@ DO NOT MODIFY THIS FILE
 Data Structure & Algorithm Assignment 3
 Graph.cpp
 Purpose: Implementation of Graph related classes
-
 @author Kien Huynh
 @version 1.1 05-10-2016
 ***************************************************/
@@ -184,7 +183,7 @@ bool GraphW::InsertEdgeFromVertices(VertexW* from, VertexW* to, int weight) {
 	return true;
 }
 
-bool GraphW::InsertEdge(VertexW* from, VertexW* to,int weight) {
+bool GraphW::InsertEdge(VertexW* from, VertexW* to, int weight) {
 	//Perform checking if [from] and [to] exist in the graph yet
 	if (!VertexExist(from)) {
 		InsertVertex(from);
@@ -213,7 +212,7 @@ bool GraphW::InsertEdge(int fromData, int toData, int weight) {
 	return InsertEdgeFromVertices(from, to, weight);
 }
 
-bool GraphW::InsertEdge(VertexW* from, EdgeW* from_to){
+bool GraphW::InsertEdge(VertexW* from, EdgeW* from_to) {
 	if (!VertexExist(from)) {
 		InsertVertex(from);
 	}
@@ -262,16 +261,16 @@ bool GraphW::InsertEdge(VertexW* from, EdgeW* from_to){
 	}
 	return true;
 }
-void GraphW::Print(){
+void GraphW::Print() {
 	if (!gHead)
 		return;
 	VertexW* vtemp = gHead;
-	while (vtemp){
+	while (vtemp) {
 		cout << vtemp->data << " -> ";
 		EdgeW* etemp = vtemp->firstEdge;
-		while (etemp){
+		while (etemp) {
 			int a = etemp->destination->data;
-			cout << etemp->destination->data <<"-("<<etemp->weight<<")"<< " -> ";
+			cout << etemp->destination->data << "-(" << etemp->weight << ")" << " -> ";
 			etemp = etemp->nextEdge;
 		}
 		cout << "NULL" << endl << "|" << endl;
@@ -279,17 +278,17 @@ void GraphW::Print(){
 	}
 	cout << "NULL" << endl;
 }
-void GraphW::resetVertex(){
+void GraphW::resetVertex() {
 	VertexW* vtemp = gHead;
-	while (vtemp){
+	while (vtemp) {
 		vtemp->processed = false;
 		vtemp = vtemp->nextVertex;
 	}
 }
 // return true if all process == true; other return false
-bool GraphW::allProcessIsTrue(){
+bool GraphW::allProcessIsTrue() {
 	VertexW* vtemp = gHead;
-	while (vtemp){
+	while (vtemp) {
 		if (vtemp->processed == false)
 			return false;
 		vtemp = vtemp->nextVertex;
@@ -297,14 +296,14 @@ bool GraphW::allProcessIsTrue(){
 	return true;
 }
 
-void GraphW::DijktraUtil(VertexW *from, VertexW *to, int weight[], int S[]){
+void GraphW::DijktraUtil(VertexW *from, VertexW *to, int weight[], int S[]) {
 	if (from == to)
 		return;
-	
+
 	EdgeW* etemp = from->firstEdge;
 	S[from->data - 1] = 1;
 	VertexW *destinationV;
-	while (etemp){
+	while (etemp) {
 		destinationV = etemp->destination;
 		if (weight[destinationV->data - 1] > weight[from->data - 1] + etemp->weight)
 			weight[destinationV->data - 1] = weight[from->data - 1] + etemp->weight;
@@ -312,47 +311,47 @@ void GraphW::DijktraUtil(VertexW *from, VertexW *to, int weight[], int S[]){
 	}
 	int j = 0;
 	for (; j < size; j++)
-		if (!S[j] && weight[j] != MAX_INT && weight[j]!=0)
+		if (!S[j] && weight[j] != MAX_INT && weight[j] != 0)
 			break;
 	if (j == size)
 		return;
 	for (int i = 0; i < size; i++)
-		if (!S[i] && weight[i]<weight[j]&& weight[i]!=0)
-			j=i;
-	VertexW *_from = GetVertex(j+1);
+		if (!S[i] && weight[i]<weight[j] && weight[i] != 0)
+			j = i;
+	VertexW *_from = GetVertex(j + 1);
 	DijktraUtil(_from, to, weight, S);
 }
-int GraphW::Dijktra(VertexW* from, VertexW* to){
+int GraphW::Dijktra(VertexW* from, VertexW* to) {
 	int* weight = new int[size];
 	int* S = new int[size];
-	for (int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		weight[i] = MAX_INT;
 		S[i] = 0;
 	}
-	weight[from->data-1] = 0;
+	weight[from->data - 1] = 0;
 	DijktraUtil(from, to, weight, S);
-	return weight[to->data-1];
+	return weight[to->data - 1];
 }
 
 /*
-Dijktra_ variant use for ex19 
+Dijktra_ variant use for ex19
 */
-bool checkList(list<int>*arr, int data){
-	for (list<int>::iterator it = arr->begin(); it != arr->end(); it++){
+bool checkList(list<int>*arr, int data) {
+	for (list<int>::iterator it = arr->begin(); it != arr->end(); it++) {
 		if (*it == data)
 			return false;
 	}
 	return true;
 }
 
-void GraphW::Dijktra_variantUtil(VertexW *from, VertexW *to, int weight[], int S[], list<int>*arr){
+void GraphW::Dijktra_variantUtil(VertexW *from, VertexW *to, int weight[], int S[], list<int>*arr) {
 	if (from == to)
 		return;
 
 	EdgeW* etemp = from->firstEdge;
 	S[from->data - 1] = 1;
 	VertexW *destinationV;
-	while (etemp){
+	while (etemp) {
 		destinationV = etemp->destination;
 		if (weight[destinationV->data - 1] > weight[from->data - 1] + etemp->weight)
 			weight[destinationV->data - 1] = weight[from->data - 1] + etemp->weight;
@@ -360,26 +359,26 @@ void GraphW::Dijktra_variantUtil(VertexW *from, VertexW *to, int weight[], int S
 	}
 	int j = 0;
 	for (; j < size; j++)
-		if (!S[j] && weight[j] != MAX_INT && weight[j] != 0&& checkList(arr,j+1))
+		if (!S[j] && weight[j] != MAX_INT && weight[j] != 0 && checkList(arr, j + 1))
 			break;
 
 
 	if (j == size)
 		return;
 	for (int i = 0; i < size; i++)
-		if (!S[i] && weight[i]<weight[j] && weight[i] != 0 && checkList(arr, i+1))
+		if (!S[i] && weight[i]<weight[j] && weight[i] != 0 && checkList(arr, i + 1))
 			j = i;
 	VertexW *_from = GetVertex(j + 1);
-	Dijktra_variantUtil(_from, to, weight, S,arr);
+	Dijktra_variantUtil(_from, to, weight, S, arr);
 }
-int GraphW::Dijktra_variant(VertexW* from, VertexW* to,list<int>*arr){
+int GraphW::Dijktra_variant(VertexW* from, VertexW* to, list<int>*arr) {
 	int* weight = new int[size];
 	int* S = new int[size];
-	for (int i = 0; i < size; i++){
+	for (int i = 0; i < size; i++) {
 		weight[i] = MAX_INT;
 		S[i] = 0;
 	}
 	weight[from->data - 1] = 0;
-	Dijktra_variantUtil(from, to, weight, S,arr);
+	Dijktra_variantUtil(from, to, weight, S, arr);
 	return weight[to->data - 1];
 }

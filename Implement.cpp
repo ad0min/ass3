@@ -6,7 +6,7 @@
 #include"Prototype.h"
 
 // free memory to avltree 
-void freeRoot(Node* root){
+void freeRoot(Node* root) {
 	if (!root)
 		return;
 	Node* temp1 = root->left;
@@ -16,84 +16,91 @@ void freeRoot(Node* root){
 	freeRoot(temp1);
 	freeRoot(temp2);
 }
-// free memory Graph
-//void freeGraph(Graph* graph){
-//	Vertex* vertex = graph->gHead;
-//	while (vertex){
-//		Vertex* temp = vertex->nextVertex;
-//		graph->RemoveVertex(vertex);
-//		vertex = temp;
-//	}
-//}
 
 
 // implement function Print() in Class Graph
-void Graph::Print(){
+void Graph::Print() {
 	if (!gHead)
 		return;
 	Vertex* vtemp = gHead;
-	while (vtemp){
-		cout << vtemp->data<<" -> ";
+	while (vtemp) {
+		cout << vtemp->data << " -> ";
 		Edge* etemp = vtemp->firstEdge;
-		while (etemp){
+		while (etemp) {
 			int a = etemp->destination->data;
-			cout << etemp->destination->data<<" -> ";
+			cout << etemp->destination->data << " -> ";
 			etemp = etemp->nextEdge;
 		}
-		cout <<"NULL"<< endl<<"|"<<endl;
+		cout << "NULL" << endl << "|" << endl;
 		vtemp = vtemp->nextVertex;
 	}
-	cout << "NULL"<<endl;
+	cout << "NULL" << endl;
 }
 
-// Implement function RemoveVertex(Vertex*)
-// code again !
-//bool Graph::RemoveVertex(int data){
-//	Vertex* vertex = this->GetVertex(data);
-//	return RemoveVertex(vertex);
-//}
-bool Graph::RemoveEdge(Vertex* from, Vertex* to){
-	if (!from || !to)
+//Ex6
+//removevertex
+bool Graph::RemoveVertex(int reData) {
+	if (!VertexExist(reData))
+	{
 		return false;
-	Vertex* vtemp = gHead;
-	while (vtemp){
-		if (vtemp == from){
-			Edge* etemp = vtemp->firstEdge;
-			if (etemp->destination == to)
-			{
-				Edge* eetemp = etemp;
-				vtemp->firstEdge = etemp->nextEdge;
-				delete eetemp;
-				return true;
-			}
-			else{
-				Edge* eetemp = etemp->nextEdge;
-				while (eetemp){
-					if (eetemp->destination == to)
-					{
-						etemp->nextEdge = eetemp->nextEdge;
-						delete eetemp;
-						return true;
-					}
-					etemp = eetemp;
-					eetemp = eetemp->nextEdge;
-				}
-			}
+	}
+	if (gHead == NULL)
+		return false;
+	if (gHead->data == reData) {
+		Vertex* temp = gHead;
+		gHead = gHead->nextVertex;
+		delete temp;
+		size--;
+		return true;
+	}
+	Vertex* etemp = gHead;
+	for (Vertex* vtemp = gHead; vtemp != NULL; vtemp = vtemp->nextVertex) {
+		if (vtemp->data == reData) {
+			etemp->nextVertex = vtemp->nextVertex;
+			delete vtemp;
+			size--;
+			return true;
 		}
-		vtemp = vtemp->nextVertex;
+		etemp = vtemp;
 	}
 	return false;
 }
-bool Graph::RemoveEdge(int from, int to){
-	Vertex *_from = GetVertex(from);
-	Vertex *_to = GetVertex(to);
-	return RemoveEdge(_from, _to);
+//removeedge
+bool Graph::RemoveEdge(int fromData, int toData) {
+	Vertex* temp = gHead;
+	while (temp != NULL) {
+		if (temp->data == fromData) {
+			Edge* tempp = temp->firstEdge;
+			if (tempp == NULL)
+				return false;
+			if (tempp->destination->data == toData) {
+				Edge* Del = tempp;
+				temp->firstEdge = temp->firstEdge->nextEdge;
+				delete Del;
+				return true;
+
+			}
+			Edge* etemp = NULL;
+			for (Edge* vtemp = temp->firstEdge; vtemp != NULL; vtemp = vtemp->nextEdge) {
+				if (vtemp->destination->data == toData) {
+
+					etemp->nextEdge = vtemp->nextEdge;
+					delete vtemp;
+					return true;
+				}
+				etemp = vtemp;
+			}
+
+		}
+		temp = temp->nextVertex;
+	}
+	return false;
 }
 
 
 // ex17 use for insert search NOde tree
 
-Node* search(Node* root, int data){
+Node* search(Node* root, int data) {
 	if (!root)
 		return NULL;
 	if (root->data == data)
@@ -103,7 +110,7 @@ Node* search(Node* root, int data){
 	else
 		return search(root->right, data);
 }
-Node *getNodeInsert(Node* root, int to){
+Node *getNodeInsert(Node* root, int to) {
 	if (!root)
 		return NULL;
 	if (root->data > to)
@@ -112,29 +119,29 @@ Node *getNodeInsert(Node* root, int to){
 			return root;
 		getNodeInsert(root->left, to);
 	}
-	else if (root->data < to){
+	else if (root->data < to) {
 		if (!root->right)
 			return root;
 		return getNodeInsert(root->right, to);
 	}
 	return NULL;
 }
-bool insert(Node*& root, int from, int to){//fail
+bool insert(Node*& root, int from, int to) {//fail
 	if (!root)
 		return false;
 	Node *temp = search(root, from), *ptemp;
-	if (!temp){
-		if (to == root->data){
+	if (!temp) {
+		if (to == root->data) {
 			temp = new Node(from);
 			ptemp = root;
-			if (temp->data > to){
+			if (temp->data > to) {
 				while (ptemp->right)
 					ptemp = ptemp->right;
 				if (ptemp->data >= from)
 					return false;
 				temp->left = root;
 			}
-			if (temp->data < to){
+			if (temp->data < to) {
 				while (ptemp->left)
 					ptemp = ptemp->left;
 				temp->left = root;
@@ -147,10 +154,10 @@ bool insert(Node*& root, int from, int to){//fail
 		}
 		return false;
 	}
-	else{
+	else {
 		ptemp = getNodeInsert(root, to);
-		if (ptemp == temp){
-			if (temp->data > to){
+		if (ptemp == temp) {
+			if (temp->data > to) {
 				temp->left = new Node(to);
 			}
 			if (temp->data < to)
@@ -161,13 +168,13 @@ bool insert(Node*& root, int from, int to){//fail
 			return false;
 	}
 }
-bool checkAVl(Node* root){
+bool checkAVl(Node* root) {
 	if (!root)
 		return true;
 	int left = heightTree(root->left);
 	int right = heightTree(root->right);
 	int sub = (int)abs(left - right);
-	if (sub <= 1){
+	if (sub <= 1) {
 		bool l = checkAVl(root->left);
 		bool r = checkAVl(root->right);
 		return (l || r);
@@ -176,9 +183,9 @@ bool checkAVl(Node* root){
 		return false;
 }
 
-void resetVertex(Graph* graph){
+void resetVertex(Graph* graph) {
 	Vertex* vtemp = graph->gHead;
-	while (vtemp){
+	while (vtemp) {
 		vtemp->processed = false;
 		vtemp = vtemp->nextVertex;
 	}
