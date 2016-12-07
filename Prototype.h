@@ -49,9 +49,21 @@ void ex19();
 
 void ex20();
 
+
+int sumCycle(Vertex*);
+
 // Implement.cpp
 
 void freeRoot(Node*);
+
+Node* search(Node *, int);
+
+
+bool insert(Node*&, int, int);
+
+bool checkAVl(Node* root);
+
+void resetVertex(Graph*);
 
 //void freeGraph(Graph*);
 
@@ -97,16 +109,24 @@ void printMatrix(int**, int);
 //int getCycle(Vertex*, const int, int i=0);
 
 
+// ex16
+bool checkSConnected(Graph*);
 
 // ex17
-int findRootMatrix(int **adjMatrix, int n);
+//int findRootMatrix(int **adjMatrix, int n);
 
 
+bool checkGraphDFS(Vertex *vertex, Node *root);
+
+bool GraphtoAVL(Graph*);
 
 // Vertex* root to point a element of graph; if wrong => fail
 
 
 // ex18
 bool findPath(int, int, GraphW*);
+
+//ex 19
+bool findPath_variant(int, int, GraphW*, list<int>*);
 
 #endif

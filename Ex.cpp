@@ -331,6 +331,20 @@ int getCycle(Vertex* vertex, const int data, int i = 0){
 	}
 	return i;
 }
+int sumCycle(Vertex* ghead){
+	int circuit = 0;
+	Vertex *vtemp = ghead;
+	while (vtemp){
+		Vertex* vvtemp = ghead;
+		while (vvtemp){
+			vvtemp->processed = false;
+			vvtemp = vvtemp->nextVertex;
+		}
+		circuit += getCycle(vtemp, vtemp->data);
+		vtemp = vtemp->nextVertex;
+	}
+	return circuit;
+}
 void ex14(){
 	int *vertexDataArr;
 	int vertexCount;
@@ -343,18 +357,8 @@ void ex14(){
 		graph->InsertEdge(edgeDataArr[i][0], edgeDataArr[i][1]);
 	}
 	graph->Print();
-	Vertex* vtemp = graph->gHead;
-	int circuit = 0;
-	while (vtemp){
-		Vertex* vvtemp = graph->gHead;
-		while (vvtemp){
-			vvtemp->processed = false;
-			vvtemp = vvtemp->nextVertex;
-		}
-		circuit += getCycle(vtemp, vtemp->data);
-		vtemp = vtemp->nextVertex;
-	}
-	cout <<"\nAll of circuit in graph is: "<< circuit;
+	int circuit = sumCycle(graph->gHead);
+	cout <<"\nAll of circuit in graph is: "<< circuit<<"\n";
 }
 void ex15(){
 	int n = 0;

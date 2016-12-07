@@ -163,34 +163,37 @@ bool checkSConnected(Graph *graph){
 
 // check Matrix cant to change a tree
 
-bool checkCycle(Vertex* vertex){
-	if (!vertex)
-		return true;
-	bool result=true;
-	while (vertex){
-		if (vertex->processed == false){
-			vertex->processed = true;
-			Edge* etemp = vertex->firstEdge;
-			while (etemp){
-				if (etemp->destination->processed == true)
-					return false;
-				result = checkCycle(etemp->destination);
-				etemp = etemp->nextEdge;
-			}
-		}
-		vertex = vertex->nextVertex;
-	}
-	return result;
-}
+//bool checkCycle(Vertex* vertex){
+//	if (!vertex)
+//		return true;
+//	bool result=true;
+//	while (vertex){
+//		if (vertex->processed == false){
+//			vertex->processed = true;
+//			Edge* etemp = vertex->firstEdge;
+//			while (etemp){
+//				if (etemp->destination->processed == true)
+//					return false;
+//				result = checkCycle(etemp->destination);
+//				etemp = etemp->nextEdge;
+//			}
+//		}
+//		vertex = vertex->nextVertex;
+//	}
+//	return result;
+//}
 
 bool GraphtoTree(Vertex *vertex, Node *&root){
 	while (vertex){
 		if (vertex->processed == false){
 			Edge *etemp = vertex->firstEdge;
 			vertex->processed = true;
+			bool result_insert = true;
 			if (etemp != NULL){// first node 
 				Vertex *vtemp1 = etemp->destination;
-				insert(root, vertex->data, vtemp1->data);
+				result_insert = insert(root, vertex->data, vtemp1->data);
+				if (result_insert == false)
+					return false;
 				etemp = etemp->nextEdge;
 				if (etemp){// second node  
 					Vertex *vtemp2 = etemp->destination;
@@ -201,34 +204,34 @@ bool GraphtoTree(Vertex *vertex, Node *&root){
 						return false;
 					}
 					else{
-						insert(root, v, v2);
+						result_insert = insert(root, v, v2);
+						if (result_insert == false)
+							return false;
 						return GraphtoTree(vtemp2, root);
 					}
 				}
 				else{
 					return GraphtoTree(vtemp1, root);
 				}
-
 			}
 		}
 		vertex = vertex->nextVertex;
 	}
 }
 bool GraphtoAVL(Graph *graph){
-	if (!checkCycle(graph->gHead)){
+	if (sumCycle(graph->gHead)){
 		cout << "Can't change this graph to avl\n";
 		return false;
 	}
 	resetVertex(graph);
 	Node *root = new Node(graph->gHead->data);
 	bool result = GraphtoTree(graph->gHead, root);
-	root->PrintNode();
 	if (result)
 	{
 		if (checkAVl(root))
 			root->PrintNode();
 		else
-			cout << "can't change to avl\n";
+			cout << "Can't change to avl\n";
 	}
 	else{
 		cout << "Can't change this graph to avl\n";

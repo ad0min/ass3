@@ -103,28 +103,62 @@ Node* search(Node* root, int data){
 	else
 		return search(root->right, data);
 }
+Node *getNodeInsert(Node* root, int to){
+	if (!root)
+		return NULL;
+	if (root->data > to)
+	{
+		if (!root->left)
+			return root;
+		getNodeInsert(root->left, to);
+	}
+	else if (root->data < to){
+		if (!root->right)
+			return root;
+		return getNodeInsert(root->right, to);
+	}
+	return NULL;
+}
 bool insert(Node*& root, int from, int to){//fail
 	if (!root)
 		return false;
-	Node *temp = search(root, from);
+	Node *temp = search(root, from), *ptemp;
 	if (!temp){
 		if (to == root->data){
 			temp = new Node(from);
-			if (temp->data > to)
+			ptemp = root;
+			if (temp->data > to){
+				while (ptemp->right)
+					ptemp = ptemp->right;
+				if (ptemp->data >= from)
+					return false;
 				temp->left = root;
-			if (temp->data < to)
+			}
+			if (temp->data < to){
+				while (ptemp->left)
+					ptemp = ptemp->left;
+				temp->left = root;
+				if (ptemp->data <= from)
+					return false;
 				temp->right = root;
+			}
 			root = temp;
 			return true;
 		}
 		return false;
 	}
 	else{
-		if (temp->data > to)
-			temp->left = new Node(to);
-		if (temp->data < to)
-			temp->right = new Node(to);
-		return true;
+		ptemp = getNodeInsert(root, to);
+		if (ptemp == temp){
+			if (temp->data > to){
+				temp->left = new Node(to);
+			}
+			if (temp->data < to)
+				temp->right = new Node(to);
+			return true;
+		}
+		else
+			return false;
 	}
 }
 bool checkAVl(Node* root){
@@ -145,7 +179,7 @@ bool checkAVl(Node* root){
 void resetVertex(Graph* graph){
 	Vertex* vtemp = graph->gHead;
 	while (vtemp){
-		vtemp->processed = true;
+		vtemp->processed = false;
 		vtemp = vtemp->nextVertex;
 	}
 }
